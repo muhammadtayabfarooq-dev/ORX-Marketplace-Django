@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+<h1>Your dashboard</h1>
+
+<section class="two-col">
+    <div>
+        <h3>Profile</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ profile_form.as_p }}
+            <button type="submit">Update profile</button>
+        </form>
+    </div>
+    <div>
+        <h3>Quick actions</h3>
+        <p><a class="button" href="{% url 'create_listing' %}">Post a new listing</a></p>
+        <p class="muted small">Stay active to get more views.</p>
+    </div>
+</section>
+
+<section>
+    <h3>Your listings</h3>
+    <div class="card-grid">
+        {% for listing in my_listings %}
+            <article class="card">
+                <a class="card-title" href="{{ listing.get_absolute_url }}">{{ listing.title }}</a>
+                <p class="muted">{{ listing.location }}</p>
+                <p class="price">${{ listing.price|floatformat:0|intcomma }}</p>
+                <p class="muted small">{{ listing.get_status_display }} · {{ listing.created_at|naturaltime }}</p>
+            </article>
+        {% empty %}
+            <p>You have no listings yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="two-col">
+    <div>
+        <h3>Offers you received</h3>
+        {% for offer in offers_for_me %}
+            <div class="card row-card">
+                <div>
+                    <p class="muted small">{{ offer.listing.title }}</p>
+                    <p class="price">${{ offer.amount|floatformat:0|intcomma }}</p>
+                    <p class="muted small">{{ offer.offered_by.username }} · {{ offer.created_at|naturaltime }}</p>
+                </div>
+                <div>
+                    <span class="badge">{{ offer.get_status_display }}</span>
+                </div>
+            </div>
+        {% empty %}
+            <p>No offers yet.</p>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Offers you made</h3>
+        {% for offer in offers_made %}
+            <div class="card row-card">
+                <div>
+                    <p class="muted small">{{ offer.listing.title }}</p>
+                    <p class="price">${{ offer.amount|floatformat:0|intcomma }}</p>
+                </div>
+                <div>
+                    <span class="badge">{{ offer.get_status_display }}</span>
+                    <p class="muted small">{{ offer.created_at|naturaltime }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <p>You have not made any offers.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

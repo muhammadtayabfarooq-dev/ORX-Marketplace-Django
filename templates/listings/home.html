@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <h1>Find great deals on used gear</h1>
+        <p>Cars, phones, furniture, and more — list items in seconds.</p>
+        <div class="search-bar">
+            <form method="get">
+                <input type="text" name="q" placeholder="Search items or locations" value="{{ query }}">
+                <select name="category">
+                    <option value="">All categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.slug }}" {% if cat.slug == selected_category %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    <div class="hero-card">
+        <h3>List your item</h3>
+        <p>Reach nearby buyers without fees.</p>
+        {% if user.is_authenticated %}
+            <a class="button" href="{% url 'create_listing' %}">Post a listing</a>
+        {% else %}
+            <a class="button" href="{% url 'register' %}">Create account</a>
+        {% endif %}
+    </div>
+</section>
+
+<section>
+    <h2>Latest listings</h2>
+    <div class="card-grid">
+        {% for listing in listings %}
+            <article class="card">
+                <div class="card-img" style="background-image: url('{{ listing.image_url|default:'https://placehold.co/600x400?text=ORX' }}');"></div>
+                <div class="card-body">
+                    <a class="card-title" href="{{ listing.get_absolute_url }}">{{ listing.title }}</a>
+                    <p class="muted">{{ listing.location }} · {{ listing.category.name }}</p>
+                    <p class="price">${{ listing.price|floatformat:0|intcomma }}</p>
+                    <p class="muted small">Posted {{ listing.created_at|naturaltime }}</p>
+                </div>
+            </article>
+        {% empty %}
+            <p>No listings yet. Be the first to post!</p>
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Previous</a>{% endif %}
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

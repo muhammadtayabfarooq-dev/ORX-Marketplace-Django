@@ -1,0 +1,65 @@
+:root {
+    --bg: #0f172a;
+    --panel: #111827;
+    --card: #1f2937;
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --accent: #22d3ee;
+    --accent-2: #a855f7;
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: radial-gradient(circle at 10% 20%, rgba(34,211,238,0.15), transparent 25%), radial-gradient(circle at 80% 10%, rgba(168,85,247,0.12), transparent 25%), var(--bg);
+    color: var(--text);
+}
+a { color: var(--accent); text-decoration: none; }
+header, footer { background: var(--panel); }
+.container { width: 95%; max-width: 1100px; margin: 0 auto; padding: 24px 0; }
+.site-header { border-bottom: 1px solid #1f2937; position: sticky; top: 0; z-index: 1; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { font-weight: 700; letter-spacing: 0.5px; color: #fff; }
+.nav-links { display: flex; align-items: center; gap: 12px; }
+.nav-links a, .link-button { color: #fff; padding: 8px 12px; border-radius: 8px; }
+.nav-links .cta { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0f172a; font-weight: 700; }
+.link-button { background: none; border: none; cursor: pointer; }
+.hero { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: center; margin: 24px 0; }
+.hero-card { background: var(--card); padding: 20px; border-radius: 14px; border: 1px solid #1f2937; }
+.hero h1 { margin-bottom: 8px; }
+.hero p { color: var(--muted); }
+.search-bar form { display: flex; gap: 10px; flex-wrap: wrap; }
+.search-bar input, .search-bar select { flex: 1; min-width: 180px; padding: 10px 12px; border-radius: 10px; border: 1px solid #1f2937; background: #0b1224; color: #fff; }
+.search-bar button, .button, button { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: none; color: #0f172a; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+.button.secondary, button.secondary { background: #1f2937; color: #fff; border: 1px solid #2d3748; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.card { background: var(--card); padding: 14px; border-radius: 12px; border: 1px solid #1f2937; }
+.card-img { background-size: cover; background-position: center; border-radius: 10px; padding-top: 60%; margin-bottom: 12px; }
+.card-title { display: block; color: #fff; font-weight: 700; margin-bottom: 4px; }
+.price { font-weight: 800; color: #fff; }
+.muted { color: var(--muted); }
+.muted.small { font-size: 13px; }
+.messages { margin: 12px 0; display: grid; gap: 6px; }
+.message { padding: 10px 12px; border-radius: 10px; background: #1f2937; }
+.message.success { border: 1px solid #22c55e; }
+.message.info { border: 1px solid var(--accent); }
+.form-card, .detail-card { background: var(--card); padding: 20px; border-radius: 14px; border: 1px solid #1f2937; margin: 18px 0; }
+form { display: grid; gap: 12px; }
+input, textarea, select { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #1f2937; background: #0b1224; color: #fff; }
+textarea { min-height: 120px; resize: vertical; }
+.detail-card { display: grid; grid-template-columns: 2fr 3fr; gap: 18px; }
+.detail-media { background-size: cover; background-position: center; min-height: 260px; border-radius: 12px; }
+.detail-body .badge, .badge { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #0b1224; color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.two-col { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin: 18px 0; }
+.row-card { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; }
+.inline-actions { display: flex; gap: 8px; }
+.inline-form { display: inline; }
+.pagination { display: flex; gap: 12px; align-items: center; margin: 14px 0; }
+.site-footer { border-top: 1px solid #1f2937; margin-top: 24px; }
+
+@media (max-width: 800px) {
+    .hero { grid-template-columns: 1fr; }
+    .detail-card { grid-template-columns: 1fr; }
+    .header-inner { flex-wrap: wrap; }
+}

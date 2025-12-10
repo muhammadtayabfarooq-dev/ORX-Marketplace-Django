@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+<article class="detail-card">
+    <div class="detail-media" style="background-image: url('{{ listing.image_url|default:'https://placehold.co/800x600?text=ORX' }}');"></div>
+    <div class="detail-body">
+        <div class="badge">{{ listing.get_status_display }}</div>
+        <h1>{{ listing.title }}</h1>
+        <p class="price">${{ listing.price|floatformat:0|intcomma }}</p>
+        <p class="muted">Condition: {{ listing.get_condition_display }} · {{ listing.category.name }} · {{ listing.location }}</p>
+        <p>{{ listing.description }}</p>
+        <p class="muted small">Posted by {{ listing.owner.username }} · {{ listing.created_at|naturaltime }}</p>
+        {% if user == listing.owner %}
+            <a class="button" href="{% url 'edit_listing' listing.slug %}">Edit listing</a>
+        {% endif %}
+    </div>
+</article>
+
+<section class="two-col">
+    <div>
+        <h3>Ask a question</h3>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="inquiry">
+            {{ inquiry_form.as_p }}
+            <button type="submit">Send message</button>
+        </form>
+    </div>
+    <div>
+        <h3>Make an offer</h3>
+        {% if user.is_authenticated %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="offer">
+                {{ offer_form.as_p }}
+                <button type="submit">Submit offer</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}?next={{ listing.get_absolute_url }}">Log in</a> to make an offer.</p>
+        {% endif %}
+    </div>
+</section>
+
+{% if user == listing.owner %}
+    <section>
+        <h3>Offers received</h3>
+        {% for offer in listing.offers.all %}
+            <div class="card row-card">
+                <div>
+                    <p class="price">${{ offer.amount|floatformat:0|intcomma }}</p>
+                    <p class="muted small">from {{ offer.offered_by.username }} · {{ offer.created_at|naturaltime }}</p>
+                    <p>{{ offer.message }}</p>
+                </div>
+                <div>
+                    <p class="badge">{{ offer.get_status_display }}</p>
+                    <div class="inline-actions">
+                        <form method="post" action="{% url 'update_offer_status' offer.id 'accepted' %}">
+                            {% csrf_token %}
+                            <button type="submit">Accept</button>
+                        </form>
+                        <form method="post" action="{% url 'update_offer_status' offer.id 'rejected' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="secondary">Reject</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No offers yet.</p>
+        {% endfor %}
+    </section>
+{% endif %}
+{% endblock %}
